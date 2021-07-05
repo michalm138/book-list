@@ -1,0 +1,66 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Book list</title>
+    <link rel="stylesheet" type="text/css" href="{% static '/css/main.css' %}">
+    <script src="https://kit.fontawesome.com/a0383e6ab5.js" crossorigin="anonymous"></script>
+</head>
+<body>
+    <div id="container">
+        <h1>Book list</h1><br>
+        <a class="button" href=""><i class="fas fa-plus"></i> Add new book</a>
+        <form method="GET">
+            <span class="filtering">
+                <span>
+                    <label>Title</label><br>
+                    <input type="text" name="title">
+                </span>
+                <span>
+                    <label>Author</label><br>
+                    <input type="text" name="author">
+                </span>
+                <span>
+                    <label>Language</label><br>
+                    <input type="text" name="language">
+                </span>
+                <span>
+                    <label>Published date</label><br>
+                    <input type="text" name="pub_date_start" placeholder="Start">
+                    <input type="text" name="pub_date_end" placeholder="End">
+                </span>
+                <span>
+                    <input type="submit" class="button" value="Filter">
+                </span>
+            </span>
+        </form>
+        <table>
+            <tr>
+                <th class="title">Title</th>
+                <th>Author</th>
+                <th>Published date</th>
+                <th>ISBN number</th>
+                <th>Page count</th>
+                <th>Front cover link</th>
+                <th>Language</th>
+                <th></th>
+            </tr>
+            {% for book in books %}
+                <tr>
+                    <td class="title">{{ book.title }}</td>
+                    <td>{{ book.author }}</td>
+                    <td>{{ book.pub_date }}</td>
+                    <td>{{ book.isbn_number }}</td>
+                    <td>{{ book.page_count }}</td>
+                    <td>{% if book.front_cover_page %}<a href="{{ book.front_cover_page }}">Open link</a>{% else %} N/A {% endif %}</td>
+                    <td>{{ book.language }}</td>
+                    <td><a class="icon" href=""><i class="fas fa-trash-alt"></i></a></td>
+                </tr>
+            {% endfor %}
+        </table>
+    </div>
+</body>
+</html>
