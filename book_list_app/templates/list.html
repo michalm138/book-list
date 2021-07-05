@@ -12,7 +12,7 @@
 <body>
     <div id="container">
         <h1>Book list</h1><br>
-        <a class="button" href=""><i class="fas fa-plus"></i> Add new book</a>
+        <a class="button" href="{% url 'create-book' %}"><i class="fas fa-plus"></i> Add new book</a>
         <form method="GET">
             <span class="filtering">
                 <span>
@@ -39,6 +39,7 @@
         </form>
         <table>
             <tr>
+                <th></th>
                 <th class="title">Title</th>
                 <th>Author</th>
                 <th>Published date</th>
@@ -50,14 +51,15 @@
             </tr>
             {% for book in books %}
                 <tr>
+                    <td><a class="icon" href="{% url 'update-book' pk=book.pk %}"><i class="fas fa-edit"></i></a></td>
                     <td class="title">{{ book.title }}</td>
                     <td>{{ book.author }}</td>
                     <td>{{ book.pub_date }}</td>
                     <td>{{ book.isbn_number }}</td>
                     <td>{{ book.page_count }}</td>
-                    <td>{% if book.front_cover_page %}<a href="{{ book.front_cover_page }}">Open link</a>{% else %} N/A {% endif %}</td>
+                    <td>{% if book.front_cover_link %}<a target="_blank" href="{{ book.front_cover_link }}">Open link</a>{% else %} N/A {% endif %}</td>
                     <td>{{ book.language }}</td>
-                    <td><a class="icon" href=""><i class="fas fa-trash-alt"></i></a></td>
+                    <td><a class="icon" href="{% url 'delete-book' pk=book.pk %}"><i class="fas fa-trash-alt"></i></a></td>
                 </tr>
             {% endfor %}
         </table>

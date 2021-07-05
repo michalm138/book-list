@@ -1,0 +1,22 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Book list</title>
+    <link rel="stylesheet" type="text/css" href="{% static '/css/main.css' %}">
+    <script src="https://kit.fontawesome.com/a0383e6ab5.js" crossorigin="anonymous"></script>
+</head>
+<body>
+    <div id="container">
+        <h1>Delete book</h1><br>
+        <form method="post">
+            {% csrf_token %}
+            <p>Are you sure you want to delete "{{ object }}"?</p>
+            <input type="submit" class="button" value="Yes, I am sure!"> <a class="button" href="{% url 'book-list' %}">No</a>
+        </form>
+    </div>
+</body>
+</html>

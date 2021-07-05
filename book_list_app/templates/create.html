@@ -1,0 +1,25 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Book list</title>
+    <link rel="stylesheet" type="text/css" href="{% static '/css/main.css' %}">
+    <script src="https://kit.fontawesome.com/a0383e6ab5.js" crossorigin="anonymous"></script>
+</head>
+<body>
+    <div id="container">
+        <h1>Add new book</h1><br>
+        <a class="button" href="{% url 'book-list' %}"><i class="fas fa-arrow-left"></i> Back to the list</a>
+        <a class="button" href="{% url 'create-book' %}"><i class="fas fa-download"></i> Import book from Google</a><br><br>
+        <h3>Manually:</h3><br>
+        <form method="POST" class="book">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <input type="submit" class="button" value="Add new book">
+        </form>
+    </div>
+</body>
+</html>

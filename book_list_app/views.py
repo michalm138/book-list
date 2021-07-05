@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from django.views.generic import ListView
+from django.views.generic import ListView, CreateView, UpdateView, DeleteView
 from book_list_app import models
 from functools import reduce
 import operator
@@ -43,3 +43,39 @@ class BookList(ListView):
             response_data = models.Book.objects.all().order_by('-id')
 
         return response_data
+
+
+class CreateBook(CreateView):
+    model = models.Book
+    template_name = 'create.html'
+    fields = [
+        'title',
+        'author',
+        'pub_date',
+        'isbn_number',
+        'page_count',
+        'front_cover_link',
+        'language',
+    ]
+    success_url = '/app/book/list/'
+
+
+class UpdateBook(UpdateView):
+    model = models.Book
+    template_name = 'update.html'
+    fields = [
+        'title',
+        'author',
+        'pub_date',
+        'isbn_number',
+        'page_count',
+        'front_cover_link',
+        'language',
+    ]
+    success_url = '/app/book/list/'
+
+
+class DeleteBook(DeleteView):
+    model = models.Book
+    template_name = 'delete.html'
+    success_url = '/app/book/list/'

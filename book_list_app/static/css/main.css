@@ -59,7 +59,8 @@ td, th {
 }
 
 .icon {
-    color: red;
+    color: #03045E;
+    text-decoration: none;
 }
 
 .icon:hover {
@@ -111,4 +112,13 @@ input:focus {
 label {
     display: inline-block;
     margin: 5px 0;
+}
+
+.book label {
+    display: block;
+}
+
+.book input {
+    width: 100%;
+    margin-bottom: 20px;
 }
