@@ -41,7 +41,7 @@ class BookList(ListView):
 
         if query:
             response_data = models.Book.objects.filter(
-                reduce(operator.or_,
+                reduce(operator.and_,
                        (Q(q) for q in query.items()))
             ).order_by('-id')
         else:
