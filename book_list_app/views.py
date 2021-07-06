@@ -1,10 +1,11 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.views.generic import ListView, CreateView, UpdateView, DeleteView
-from book_list_app import models
+from book_list_app import models, serializers
 from functools import reduce
 import operator
 from django.db.models import Q
 from datetime import datetime
+import requests
 
 
 class BookList(ListView):
@@ -79,3 +80,44 @@ class DeleteBook(DeleteView):
     model = models.Book
     template_name = 'delete.html'
     success_url = '/app/book/list/'
+
+
+def import_book_google(request):
+    context = {}
+
+    if request.method == 'GET' and request.GET.get('keywords'):
+        context['books'] = []
+        keywords = request.GET.get('keywords').strip()
+        response_data = requests.get(f'https://www.googleapis.com/books/v1/volumes?q={keywords}').json()
+        for item in response_data['items']:
+            data = {}
+            data['title'] = item['volumeInfo']['title'] if 'title' in item['volumeInfo'] else 'Unknown'
+            data['author'] = item['volumeInfo']['authors'][0] if 'authors' in item['volumeInfo'] else 'Unknown'
+            data['pub_date'] = item['volumeInfo']['publishedDate'] if 'publishedDate' in item['volumeInfo'] else ''
+            if 'industryIdentifiers' in item['volumeInfo']:
+                if item['volumeInfo']['industryIdentifiers'][0]['type'] == 'ISBN_10' or item['volumeInfo']['industryIdentifiers'][0]['type'] == 'ISBN_13':
+                    data['isbn_number'] = item['volumeInfo']['industryIdentifiers'][0]['identifier']
+            else:
+                data['isbn_number'] = ''
+            data['page_count'] = item['volumeInfo']['pageCount'] if 'pageCount' in item['volumeInfo'] else 0
+            data['front_cover_link'] = item['volumeInfo']['imageLinks']['thumbnail'] if 'imageLinks' in item['volumeInfo'] else ''
+            data['language'] = item['volumeInfo']['language'] if item['volumeInfo']['language'] else ''
+
+            context['books'].append(data)
+    elif request.method == 'POST':
+        serializer = serializers.BookSerializer(data={
+            'title': request.POST.get('title'),
+            'author': request.POST.get('author'),
+            'pub_date': request.POST.get('pub_date'),
+            'isbn_number': request.POST.get('isbn_number'),
+            'page_count': request.POST.get('page_count'),
+            'front_cover_link': request.POST.get('front_cover_link'),
+            'language': request.POST.get('language')
+        })
+        if serializer.is_valid():
+            serializer.save()
+            return redirect('book-list')
+        else:
+            context['error'] = 'Book has not been added due to incorrect data.'
+
+    return render(request, 'import.html', context)

@@ -14,7 +14,7 @@
         <h1>Delete book</h1><br>
         <form method="post">
             {% csrf_token %}
-            <p>Are you sure you want to delete "{{ object }}"?</p>
+            <p>Are you sure you want to delete "<b>{{ object }}</b>"?</p>
             <input type="submit" class="button" value="Yes, I am sure!"> <a class="button" href="{% url 'book-list' %}">No</a>
         </form>
     </div>

@@ -13,7 +13,7 @@
     <div id="container">
         <h1>Add new book</h1><br>
         <a class="button" href="{% url 'book-list' %}"><i class="fas fa-arrow-left"></i> Back to the list</a>
-        <a class="button" href="{% url 'create-book' %}"><i class="fas fa-download"></i> Import book from Google</a><br><br>
+        <a class="button" href="{% url 'import-book' %}"><i class="fas fa-download"></i> Import book from Google</a><br><br>
         <h3>Manually:</h3><br>
         <form method="POST" class="book">
             {% csrf_token %}

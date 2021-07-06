@@ -8,38 +8,22 @@
     <title>Book list</title>
     <link rel="stylesheet" type="text/css" href="{% static '/css/main.css' %}">
     <script src="https://kit.fontawesome.com/a0383e6ab5.js" crossorigin="anonymous"></script>
+    <script type="text/javascript">
+        {% if error %}
+            alert("{{ error }}");
+        {% endif %}
+    </script>
 </head>
 <body>
     <div id="container">
-        <h1>Book list</h1><br>
-        <a class="button" href="{% url 'create-book' %}"><i class="fas fa-plus"></i> Add new book</a>
+        <h1>Import book from Google</h1><br>
+        <a class="button" href="{% url 'create-book' %}"><i class="fas fa-arrow-left"></i> Back to create book page</a><br>
         <form method="GET">
-            <span class="filtering">
-                <span>
-                    <label>Title</label><br>
-                    <input type="text" name="title">
-                </span>
-                <span>
-                    <label>Author</label><br>
-                    <input type="text" name="author">
-                </span>
-                <span>
-                    <label>Language</label><br>
-                    <input type="text" name="language">
-                </span>
-                <span>
-                    <label>Published date</label><br>
-                    <input type="text" name="pub_date_start" placeholder="Start">
-                    <input type="text" name="pub_date_end" placeholder="End">
-                </span>
-                <span>
-                    <input type="submit" class="button" value="Filter">
-                </span>
-            </span>
+            <input type="text" name="keywords" required>
+            <input type="submit" class="button" value="Search">
         </form>
         <table>
             <tr>
-                <th></th>
                 <th class="title">Title</th>
                 <th>Author</th>
                 <th>Published date</th>
@@ -51,7 +35,6 @@
             </tr>
             {% for book in books %}
                 <tr>
-                    <td><a class="icon" href="{% url 'update-book' pk=book.pk %}"><i class="fas fa-edit"></i></a></td>
                     <td class="title">{{ book.title }}</td>
                     <td>{{ book.author }}</td>
                     <td>{% if book.pub_date %}{{ book.pub_date }}{% else %}-{% endif %}</td>
@@ -59,7 +42,19 @@
                     <td>{{ book.page_count }}</td>
                     <td>{% if book.front_cover_link %}<a target="_blank" href="{{ book.front_cover_link }}">Open link</a>{% else %}-{% endif %}</td>
                     <td>{{ book.language }}</td>
-                    <td><a class="icon" href="{% url 'delete-book' pk=book.pk %}"><i class="fas fa-trash-alt"></i></a></td>
+                    <td>
+                        <form method="POST">
+                            {% csrf_token %}
+                            <input type="text" name="title" hidden value="{{ book.title }}">
+                            <input type="text" name="author" hidden value="{{ book.author }}">
+                            <input type="text" name="pub_date" hidden value="{{ book.pub_date }}">
+                            <input type="text" name="isbn_number" hidden value="{{ book.isbn_number }}">
+                            <input type="text" name="page_count" hidden value="{{ book.page_count }}">
+                            <input type="text" name="front_cover_link" hidden value="{{ book.front_cover_link }}">
+                            <input type="text" name="language" hidden value="{{ book.language }}">
+                            <input type="submit" style="margin: 0;" class="button" value="Add">
+                        </form>
+                    </td>
                 </tr>
             {% endfor %}
         </table>

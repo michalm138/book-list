@@ -16,8 +16,8 @@ def pub_date_validator(value):
 class Book(models.Model):
     title = models.CharField(max_length=255)
     author = models.CharField(max_length=255)
-    pub_date = models.CharField(max_length=10, validators=[pub_date_validator])
-    isbn_number = models.CharField(max_length=13, validators=[isbn_validator])
+    pub_date = models.CharField(max_length=10, validators=[pub_date_validator], blank=True, null=True)
+    isbn_number = models.CharField(max_length=13, validators=[isbn_validator], blank=True, null=True)
     page_count = models.PositiveIntegerField()
     front_cover_link = models.URLField(blank=True, null=True)
     language = models.CharField(max_length=45)
