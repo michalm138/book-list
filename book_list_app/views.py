@@ -6,6 +6,10 @@ import operator
 from django.db.models import Q
 from datetime import datetime
 import requests
+from rest_framework.generics import ListAPIView
+from rest_framework import filters
+import django_filters
+from django_filters import rest_framework as drf_filters
 
 
 class BookList(ListView):
@@ -121,3 +125,28 @@ def import_book_google(request):
             context['error'] = 'Book has not been added due to incorrect data.'
 
     return render(request, 'import.html', context)
+
+
+class BookFilter(drf_filters.FilterSet):
+    title = django_filters.CharFilter(field_name='title', lookup_expr='icontains')
+    author = django_filters.CharFilter(field_name='author', lookup_expr='icontains')
+    language = django_filters.CharFilter(field_name='language', lookup_expr='icontains')
+    pub_date_start = django_filters.CharFilter(field_name='pub_date', lookup_expr='gte')
+    pub_date_end = django_filters.CharFilter(field_name='pub_date', lookup_expr='lte')
+
+    class Meta:
+        model = models.Book
+        fields = [
+            'title',
+            'author',
+            'language',
+        ]
+
+
+class BookListApi(ListAPIView):
+    queryset = models.Book.objects.all()
+    serializer_class = serializers.BookSerializer
+    filter_backends = [filters.OrderingFilter, drf_filters.DjangoFilterBackend]
+    filterset_class = BookFilter
+    ordering_fields = []
+    ordering = ['-id']
