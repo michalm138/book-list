@@ -13,6 +13,7 @@ pip install -r requirements.txt
 Project uses environment variables for higher security. Create *.env* file and add following lines:
 ```
 SECRET_KEY=django-insecure-$#f_(z0bq+5pu)2g@=@y2%2etz4y4%wcoig5zyzk4!i#0ybb^g
+ALLOWED_HOSTS=127.0.0.1
 DB_NAME=
 DB_USER=
 DB_PASSWORD=
