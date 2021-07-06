@@ -4,8 +4,8 @@ import re
 
 
 def isbn_validator(value):
-    if not re.search('^\d+$', value):
-        raise ValidationError('ISBN number should contains numbers only.')
+    if not re.search('^\d+$', value) or not (len(value) == 10 or len(value) == 13):
+        raise ValidationError('ISBN number should contains numbers only, and its length must be 10 or 13.')
 
 
 def pub_date_validator(value):
